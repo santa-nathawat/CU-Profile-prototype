@@ -1,0 +1,118 @@
+@import 'tailwindcss';
+
+:root {
+  color-scheme: light;
+
+  --canvas: #f8f6f3;
+  --surface: #ffffff;
+  --sunken: #f1eeea;
+  --line: #e4dfd8;
+  --line-strong: #c9c2b8;
+  --ink: #211d1a;
+  --ink-muted: #5c564f;
+  --ink-subtle: #6f6962;
+
+  --accent: #c2185b;
+  --accent-hover: #a01249;
+  --accent-soft: #fceef3;
+  --accent-ink: #a01249;
+
+  --danger: #b3261e;
+  --danger-hover: #8f1e18;
+  --danger-soft: #fcefed;
+  --success: #1b6e45;
+  --success-soft: #e9f5ee;
+  --warning: #7f5500;
+  --warning-soft: #fbf3e0;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-sunken: var(--sunken);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* The one type scale. Line heights leave room for Thai vowels and tone marks. */
+@theme {
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.55;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.55;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.3;
+  --text-3xl: 2.5rem;
+  --text-3xl--line-height: 1.2;
+  --text-4xl: 3.25rem;
+  --text-4xl--line-height: 1.15;
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 5rem;
+  }
+
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    overflow-wrap: anywhere;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  button:not(:disabled),
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+}
+
+@utility link {
+  color: var(--accent-ink);
+  text-decoration-line: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

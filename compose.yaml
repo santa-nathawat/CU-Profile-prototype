@@ -1,0 +1,83 @@
+services:
+  web:
+    image: cu-profile-web:development
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: development
+    environment:
+      API_URL: http://api:3001
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - '127.0.0.1:${WEB_PORT:-3000}:3000'
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/web
+          target: /app/apps/web
+          initial_sync: true
+          ignore: [package.json, Dockerfile, next-env.d.ts]
+  api:
+    image: cu-profile-api:development
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: development
+    environment:
+      PORT: '3001'
+      DATABASE_URL: postgresql://cu_profile:cu_profile@postgres:5432/cu_profile
+      DEMO_SIGN_IN: 'true'
+      COOKIE_SECURE: 'false'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        ['CMD', 'wget', '--spider', '-q', 'http://127.0.0.1:3001/api/v1/health']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+    ports:
+      - '127.0.0.1:${API_PORT:-3001}:3001'
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/api
+          target: /app
+          initial_sync: true
+          ignore: [Dockerfile]
+  seed:
+    image: cu-profile-api:seed
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: seed
+    network_mode: service:postgres
+    environment:
+      DATABASE_URL: postgresql://cu_profile:cu_profile@localhost:5432/cu_profile
+    command: ['--if-empty']
+    depends_on:
+      postgres:
+        condition: service_healthy
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: cu_profile
+      POSTGRES_PASSWORD: cu_profile
+      POSTGRES_DB: cu_profile
+    ports:
+      - '127.0.0.1:${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -h 127.0.0.1 -U cu_profile -d cu_profile']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  postgres-data:

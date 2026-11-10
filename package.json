@@ -1,0 +1,31 @@
+{
+  "name": "cu-profile",
+  "private": true,
+  "workspaces": [
+    "apps/web"
+  ],
+  "engines": {
+    "node": ">=24 <25",
+    "npm": ">=11 <12"
+  },
+  "scripts": {
+    "up": "node scripts/dev.mjs up",
+    "down": "node scripts/dev.mjs down",
+    "logs": "node scripts/dev.mjs logs",
+    "dev": "npm run dev --workspace=@cu-profile/web",
+    "build": "npm run build --workspace=@cu-profile/web",
+    "lint": "npm run lint --workspace=@cu-profile/web",
+    "typecheck": "npm run typecheck --workspace=@cu-profile/web",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "eslint": "10.14.0",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "minimatch@>=7 <11.0.1": "11.0.5"
+  }
+}

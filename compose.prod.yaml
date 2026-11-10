@@ -1,0 +1,11 @@
+services:
+  web:
+    image: cu-profile-web:production
+    build:
+      target: runtime
+    develop: !reset null
+  api:
+    image: cu-profile-api:production
+    build:
+      target: runtime
+    develop: !reset null
